@@ -27,7 +27,13 @@ public class Products extends Controller {
     }
 
     public static Result details(String ean){
-        return TODO;
+        final Product product = Product.findByEan(ean);
+        if (product == null){
+            return notFound(String.format("Product %s does not exist.", ean));
+        }
+
+        Form<Product> filledForm = productForm.fill(product);
+        return ok(details.render(filledForm));
     }
 
     public static Result save(){
@@ -39,6 +45,14 @@ public class Products extends Controller {
         Product product = boundForm.get();
         product.save();
         flash("success", String.format("Successfully added product %s", product));
+        return redirect(routes.Products.list());
+    }
+    public static Result delete(String ean) {
+        final Product product = Product.findByEan(ean);
+        if (product == null){
+            return notFound(String.format("Product %s does not exists.", ean));
+        }
+        Product.remove(product);
         return redirect(routes.Products.list());
     }
 }
