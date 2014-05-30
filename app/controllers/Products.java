@@ -6,7 +6,8 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.products.list;
 import views.html.products.details;
-
+import play.mvc.*;
+import views.html.*;
 import java.util.List;
 
 /**
@@ -20,13 +21,18 @@ public class Products extends Controller {
     }
     public static Result newProduct(){
         return ok(details.render(productForm));
-    }ou
+    }
     public static Result details(String ean){
         return TODO;
     }
     public static Result save(){
         Form<Product> boundForm = productForm.bindFromRequest();
+        if (boundForm.hasErrors()){
+            flash("error", "Please correct the form below.");
+            return badRequest(details.render(boundForm));
+        }
         Product product = boundForm.get();
-        return TODO;
+        product.save();
+        return ok(String.format("Saved product %s", product));
     }
 }
