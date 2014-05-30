@@ -14,17 +14,22 @@ import java.util.List;
  * Created by Michal on 29/05/2014.
  */
 public class Products extends Controller {
+
     private static final Form<Product> productForm = Form.form(Product.class);
+
     public static Result list(){
         List<Product> products = Product.findAll();
         return ok(list.render(products));
     }
+
     public static Result newProduct(){
         return ok(details.render(productForm));
     }
+
     public static Result details(String ean){
         return TODO;
     }
+
     public static Result save(){
         Form<Product> boundForm = productForm.bindFromRequest();
         if (boundForm.hasErrors()){
@@ -33,6 +38,7 @@ public class Products extends Controller {
         }
         Product product = boundForm.get();
         product.save();
-        return ok(String.format("Saved product %s", product));
+        flash("success", String.format("Successfully added product %s", product));
+        return redirect(routes.Products.list());
     }
 }

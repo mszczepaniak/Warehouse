@@ -9,22 +9,8 @@ import java.util.List;
  * Created by Michal on 29/05/2014.
  */
 public class Product {
-    @Constraints.Required
-    public String ean;
-    @Constraints.Required
-    public String name;
-    public String description;
-    public Product() {}
-    public Product(String ean, String name, String description){
-        this.ean = ean;
-        this.name = name;
-        this.description = description;
-    }
-    public String toString(){
-        return String.format("%s - %s", ean, name);
-    }
-
     private static List<Product> products;
+
     // NEVER DO THIS IN REAL APP ! ITS ONLY A MOCKUP
     static {
         products = new ArrayList<Product>();
@@ -34,6 +20,24 @@ public class Product {
         products.add(new Product("4444444444444", "Paperclips 4", "Paperclips description 4"));
         products.add(new Product("5555555555555", "Paperclips 5", "Paperclips description 5"));
     }
+
+    @Constraints.Required
+    public String ean;
+    @Constraints.Required
+    public String name;
+    public String description;
+
+    public Product() {}
+
+    public Product(String ean, String name, String description){
+        this.ean = ean;
+        this.name = name;
+        this.description = description;
+    }
+
+
+
+
 
     // PLUMBING
     public static List<Product> findAll(){
@@ -47,6 +51,7 @@ public class Product {
         }
         return null;
     }
+
     public static List<Product> findByName(String term){
         final List<Product> results = new ArrayList<Product>();
         for (Product candidate: products){
@@ -56,11 +61,17 @@ public class Product {
         }
         return results;
     }
+
     public static boolean remove(Product product){
         return products.remove(product);
     }
+
     public void save(){
         products.remove(findByEan(this.ean));
         products.add(this);
+    }
+
+    public String toString(){
+        return String.format("%s - %s", ean, name);
     }
 }
